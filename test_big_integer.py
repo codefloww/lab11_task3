@@ -129,7 +129,7 @@ class TestBigInteger(unittest.TestCase):
         self.assertEqual(str(self.minus_one // self.one), "-1")
         self.assertEqual(str(self.minus_one // self.ten), "-1")
         self.assertEqual(str(self.integ // 10), "1")
-        self.assertEqual(str(BigInteger("-101")//BigInteger('10')),'-11')
+        self.assertEqual(str(BigInteger("-101") // BigInteger("10")), "-11")
 
     def test_mod(self):
         self.assertRaises(ZeroDivisionError, lambda: self.zero % self.zero)
@@ -185,7 +185,7 @@ class TestBigInteger(unittest.TestCase):
         self.assertEqual(str(self.binary | self.an_binary), "11111")
 
     def test_lshift(self):
-        self.assertEqual(str(self.binary << BigInteger('3')), "10101000")
+        self.assertEqual(str(self.binary << BigInteger("3")), "10101000")
         self.assertEqual(str(self.binary << 0), "10101")
         self.assertEqual(str(self.binary << -1), "1010")
         self.assertEqual(str(self.binary << -2), "101")
