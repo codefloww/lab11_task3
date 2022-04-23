@@ -1,5 +1,4 @@
 """BigInteger implementation for representing and manipulating large integers."""
-from typing import overload
 
 
 VARIANT = 70
@@ -87,7 +86,7 @@ class BigInteger:
         Returns:
             BigInteger: sum of two big integers
         """
-        sum = BigInteger()
+        integer_sum = BigInteger()
         sum_carry = 0
         if isinstance(__o, int) or (isinstance(__o, str) and __o.isdigit()):
             __o = BigInteger(str(__o))
@@ -109,33 +108,33 @@ class BigInteger:
                         if current.digit - another_current.digit + sum_carry < 0
                         else 0
                     )
-                sum._add_digit(digit_sum, False)
+                integer_sum._add_digit(digit_sum, False)
                 current = current.next
                 another_current = another_current.next
             else:
                 if (self.positive and __o.positive) or (
                     not self.positive and not __o.positive
                 ):
-                    sum._add_digit(current.digit + sum_carry, False)
+                    integer_sum._add_digit(current.digit + sum_carry, False)
                     sum_carry = 0
                 else:
-                    sum._add_digit(current.digit + sum_carry, False)
+                    integer_sum._add_digit(current.digit + sum_carry, False)
                     sum_carry = -1 if current.digit + sum_carry < 0 else 0
                 current = current.next
 
-        sum._add_digit(sum_carry, False)
-        sum.dump_integer()
+        integer_sum._add_digit(sum_carry, False)
+        integer_sum.dump_integer()
         if (
             (self.positive and __o.positive)
             or (self._abs_lt(__o) and __o.positive)
             or (__o._abs_lt(self) and self.positive)
         ):
-            sum.positive = True
+            integer_sum.positive = True
         else:
-            sum.positive = False
-        if sum._digits() == [0]:
-            sum.positive = True
-        return sum
+            integer_sum.positive = False
+        if integer_sum._digits() == [0]:
+            integer_sum.positive = True
+        return integer_sum
 
     def __sub__(self, __o: object) -> object:
         """Subtract two big integers
