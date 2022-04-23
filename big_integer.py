@@ -72,6 +72,14 @@ class BigInteger:
             else "-" + "".join(str(digit) for digit in self._digits())
         )
 
+    def to_string(self):
+        """Convert big integer to string
+
+        Returns:
+            str: string representation of big integer
+        """
+        return str(self)
+
     def dump_integer(self) -> None:
         """Dump integer to the head of the list"""
         while self._tail.digit == 0 and self._tail.previous is not None:
@@ -191,14 +199,21 @@ class BigInteger:
         """
         if isinstance(__o, int) or (isinstance(__o, str) and __o.isdigit()):
             __o = BigInteger(str(__o))
-        first = self.abs()
-        second = __o.abs() * BigInteger("-1")
+        first = self.copy()
+        second = __o.copy()
         if str(second) == "0":
             raise ZeroDivisionError
         count = 0
-        while first >= second.abs():
-            first = first + second
-            count += 1
+        if (first.positive and second.positive) or (
+            not first.positive and not second.positive
+        ):
+            while not first._abs_lt(second):
+                first = first - second
+                count += 1
+        else:
+            while not first._abs_lt(second) or first.positive != second.positive:
+                first = first + second
+                count -= 1
         result = BigInteger(str(count))
         return result
 
@@ -258,11 +273,11 @@ class BigInteger:
         or_bin_integer.is_binary = True
         return or_bin_integer
 
-    def __lshift__(self, shift: int) -> object:
+    def __lshift__(self, shift: object) -> object:
         """Left bit shift of big integer
 
         Args:
-            shift (int): Shift amount
+            shift (int|BigInteger): Shift amount
 
         Returns:
             BigInteger: Bitwise left shift of big integer
@@ -270,6 +285,8 @@ class BigInteger:
         converted = self.copy()
         if not self.is_binary:
             converted = self.to_bin()
+        if isinstance(shift, BigInteger):
+            shift = int(str(shift))
         if shift < 0:
             return self >> -shift
         for _ in range(shift):
