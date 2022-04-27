@@ -1,5 +1,5 @@
 """BigInteger implementation for representing and manipulating large integers."""
-
+from dataclasses import dataclass
 
 VARIANT = 70
 # 70 Кривень Павло ['<=', '<'] ['*', '//'] ['|', '<<']
@@ -434,14 +434,12 @@ class BigInteger:
             current = current.next
         return dec_integer
 
-
+@dataclass
 class DecimalDigitNode:
     """Node of decimal digit list"""
-
-    def __init__(self, digit: int) -> None:
-        self.digit = digit
-        self.next = None
-        self.previous = None
+    digit: int
+    next: "DecimalDigitNode" = None
+    previous: "DecimalDigitNode" = None
 
     def __str__(self) -> str:
         return str(self.digit)
