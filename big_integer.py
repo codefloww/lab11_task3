@@ -17,7 +17,7 @@ class BigInteger:
             init_value = str(init_value)
 
         if init_value is not None:
-            if int(init_value) < 0:
+            if '-' in init_value:
                 self.positive = False
                 init_value = init_value.lstrip("-")
             for digit in init_value:
@@ -66,11 +66,12 @@ class BigInteger:
         return digits
 
     def __str__(self) -> str:
-        return (
-            "".join(str(digit) for digit in self._digits())
-            if self.positive
-            else "-" + "".join(str(digit) for digit in self._digits())
-        )
+        represent = ''
+        current = self._tail
+        while current is not None:
+            represent +=str(current)
+            current = current.previous
+        return represent if self.positive else '-'+represent
 
     def to_string(self):
         """Convert big integer to string
